@@ -2,12 +2,13 @@
 
 """PHP non-alphanumeric encoder
 Usage:
-  phpnonalphanum.py <php_code>
-  phpnonalphanum.py [-e] -x <function> <parameters>...
+  phpnonalphanum.py [-u] <php_code>
+  phpnonalphanum.py [-u] [-e] -x <function> <parameters>...
   phpnonalphanum.py (-h | --help)
 
 Options:
   -e                                Echo the payload result. Default behavior will execute the payload, but you might need to echo the result. (Actually calls printf)
+  -u                                URL encode every character of the payload.
   -x <function> <parameters>...     Generate PHP code ready to be passed in an 'eval' function. Default behavior just encodes a PHP string.
   -h --help                         Shows this message.
 
@@ -123,6 +124,14 @@ def generate_eval_string(function, parameters, echo=False):
     payload += ';'
     return payload
 
+def urlencode(payload):
+    encoded = ""
+    for c in payload:
+        if c == 'ε':
+            encoded += "%CE%B5"
+        else:
+            encoded += "%{0:0>2}".format(format(ord(c), "x")).upper()
+    return encoded
 
 if __name__ == "__main__":
     args = docopt.docopt(__doc__)
@@ -132,4 +141,8 @@ if __name__ == "__main__":
         function = args["-x"]
         parameters = args["<parameters>"]
         payload = generate_eval_string(function, parameters, args["-e"])
+
+    if args["-u"]:
+        payload = urlencode(payload)
+
     print(payload)
