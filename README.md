@@ -7,21 +7,22 @@ It is just a Python3 rewrite with more complete features, that I find very usefu
 
 ## Usage
 ```
-phpnonalphanum.py <php_code>  
-phpnonalphanum.py [-e] -x <function> <parameters>...  
-phpnonalphanum.py (-h | --help)  
+phpnonalphanum.py [-u] <php_code>
+phpnonalphanum.py [-u] [-e] -x <function> <parameters>...
+phpnonalphanum.py (-h | --help)
 ```
 
 ## Options
 ```
--e                                Echo the payload result. Default behavior will execute the payload, but you might need to echo the result. (Actually calls printf)  
--x <function> <parameters>...     Generate PHP code ready to be passed in an 'eval' function. Default behavior just encodes a PHP string.  
--h --help                         Shows this message.  
+-e                             Echo the payload result. Default behavior will execute the payload, but you might need to echo the result. (Actually calls printf)
+-u                             URL encode every character of the payload.
+-x <function> <parameters>...  Generate PHP code ready to be passed in an 'eval' function. Default behavior just encodes a PHP string.
+-h --help                      Shows this message.
 ```
 
 ## Examples
 ```
 phpnonalphanum.py 'echo base64_encode(file_get_contents("index.php"))'
 phpnonalphanum.py -x 'system' 'ls'
-phpnonalphanum.py -e -x 'call_user_func' 'file_get_contents' '.htaccess'
+phpnonalphanum.py -u -e -x 'call_user_func' 'file_get_contents' '.htaccess'
 ```
